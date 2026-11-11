@@ -540,6 +540,7 @@ binds {
     // Applications
     Mod+B { spawn "firefox"; }
     Mod+Y { spawn "dolphin"; }
+    Mod+G { spawn "gitkraken"; }
     Mod+X { spawn "code"; }
     Mod+Shift+S { spawn "steam"; }
 
