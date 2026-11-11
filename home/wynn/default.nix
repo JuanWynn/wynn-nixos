@@ -5,6 +5,7 @@
   imports = [
     ./apps
     ./programs/git.nix
+    ./shell/bash.nix
   ];
 
   # User information
