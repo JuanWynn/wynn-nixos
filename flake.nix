@@ -1,3 +1,4 @@
+
 {
   description = "Wynn NixOS configuration";
 
@@ -15,28 +16,96 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+    let
       system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      # -----------------------------------------------
+      # NixOS
+      # -----------------------------------------------
 
-      modules = [
-        ./configuration.nix
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        inherit system;
 
-        home-manager.nixosModules.home-manager
+        modules = [
+          ./configuration.nix
 
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
+          home-manager.nixosModules.home-manager
 
-            extraSpecialArgs = {
-              inherit inputs;
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+
+              extraSpecialArgs = {
+                inherit inputs;
+              };
+
+              users.wynn = import ./home/wynn;
             };
+          }
+        ];
+      };
 
-            users.wynn = import ./home/wynn;
-          };
-        }
-      ];
+      # -----------------------------------------------
+      # Development Shells
+      # -----------------------------------------------
+
+      devShells.${system} = {
+
+        # JavaScript / TypeScript
+        javascript = pkgs.mkShell {
+          name = "wynn-javascript";
+
+          packages = with pkgs; [
+            nodejs
+            pnpm
+          ];
+
+          shellHook = ''
+            echo "Wynn JavaScript / TypeScript Environment"
+            echo "Node.js: $(node --version)"
+            echo "pnpm: $(pnpm --version)"
+          '';
+        };
+
+        # Python
+        python = pkgs.mkShell {
+          name = "wynn-python";
+
+          packages = with pkgs; [
+            (python3.withPackages (pythonPackages: with pythonPackages; [
+              pip
+              pytest
+            ]))
+
+            ruff
+          ];
+
+          shellHook = ''
+            echo "Wynn Python Development Environment"
+            echo "Python: $(python --version)"
+            echo "Ruff: $(ruff --version)"
+          '';
+        };
+
+        # C# / Unity
+        unity = pkgs.mkShell {
+          name = "wynn-unity";
+
+          packages = with pkgs; [
+            dotnet-sdk
+          ];
+
+          shellHook = ''
+            echo "Wynn Unity / C# Development Environment"
+            echo ".NET SDK: $(dotnet --version)"
+          '';
+        };
+      };
     };
-  };
 }
+
+
