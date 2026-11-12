@@ -13,7 +13,6 @@
     vim
     neovim
     vscode
-    git
     gitkraken
 
     # Desktop applications
