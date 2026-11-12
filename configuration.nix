@@ -23,6 +23,9 @@
 
     # Gaming
     ./modules/gaming/steam.nix
+
+    # Services
+    ./modules/services/syncthing.nix
   ];
 
   # Browser
