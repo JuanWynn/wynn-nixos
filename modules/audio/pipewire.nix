@@ -1,7 +1,8 @@
-{ ... }:
+
+{ pkgs, ... }:
 
 {
-  # Disable PulseAudio
+  # Disable standalone PulseAudio
   services.pulseaudio.enable = false;
 
   # Realtime audio permissions
@@ -15,6 +16,14 @@
     alsa.support32Bit = true;
 
     pulse.enable = true;
-    jack.enable = true;
+
+    # Avoid globally exporting JACK libraries
+    jack.enable = false;
   };
+
+  # JACK compatibility wrapper
+  environment.systemPackages = [
+    pkgs.pipewire.jack
+  ];
 }
+

@@ -5,6 +5,7 @@
   imports = [
     ./apps
     ./programs/git.nix
+    ./programs/spicetify.nix
     ./shell/bash.nix
   ];
 

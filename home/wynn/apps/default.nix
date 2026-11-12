@@ -7,6 +7,13 @@
     tree
     wget
     fastfetch
+    pciutils
+    mesa-demos
+    btop
+    ripgrep
+    fd
+    fzf
+    jq
 
     # Editors and development
     nano
@@ -14,14 +21,45 @@
     neovim
     vscode
     gitkraken
+    nodejs
+    pnpm
 
-    # Desktop applications
-    discord
+    # Nix development
+    nixfmt
+    nil
+    statix
+
+    # Desktop and file management
     alacritty
     kdePackages.dolphin
+    kdePackages.ark
+    kdePackages.okular
+    kdePackages.gwenview
     yazi
+    yacreader
 
-    # Audio utilities
+    # Office
+    libreoffice-qt
+
+    # Multimedia
+    vlc
+    blender
+    gimp
+    inkscape
+    obs-studio
+    ffmpeg
+    imagemagick
+
+    # Communication
+    discord
+
+    # Audio
     pulseaudio
+    qpwgraph
+
+    # Compression
+    unzip
+    zip
+    p7zip
   ];
 }

@@ -3,7 +3,10 @@
   # User account
   users.users.wynn = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ 
+      "wheel"
+      "gamemode"
+     ];
   };
 }
 

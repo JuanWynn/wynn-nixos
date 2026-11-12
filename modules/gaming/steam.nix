@@ -1,3 +1,4 @@
+
 { ... }:
 
 {
@@ -12,5 +13,18 @@
   hardware.steam-hardware.enable = true;
 
   # GameMode
-  programs.gamemode.enable = true;
+  programs.gamemode = {
+    enable = true;
+
+    settings = {
+      general = {
+        desiredgov = "performance";
+        defaultgov = "schedutil";
+      };
+    };
+  };
 }
+  
+
+
+
