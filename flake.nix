@@ -1,4 +1,3 @@
-
 {
   description = "Wynn NixOS configuration";
 
@@ -16,96 +15,79 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
-      # -----------------------------------------------
       # NixOS
-      # -----------------------------------------------
-
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
           ./configuration.nix
-
           home-manager.nixosModules.home-manager
 
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-
-              extraSpecialArgs = {
-                inherit inputs;
-              };
-
+              extraSpecialArgs = { inherit inputs; };
               users.wynn = import ./home/wynn;
             };
           }
         ];
       };
 
-      # -----------------------------------------------
-      # Development Shells
-      # -----------------------------------------------
-
+      # Development environments
       devShells.${system} = {
+        default = pkgs.mkShell {
+          name = "wynn-core";
+          packages = with pkgs; [
+            git
+            nixfmt
+            nil
+            statix
+          ];
+        };
 
-        # JavaScript / TypeScript
         javascript = pkgs.mkShell {
           name = "wynn-javascript";
-
           packages = with pkgs; [
             nodejs
             pnpm
           ];
-
-          shellHook = ''
-            echo "Wynn JavaScript / TypeScript Environment"
-            echo "Node.js: $(node --version)"
-            echo "pnpm: $(pnpm --version)"
-          '';
         };
 
-        # Python
         python = pkgs.mkShell {
           name = "wynn-python";
 
-          packages = with pkgs; [
-            (python3.withPackages (pythonPackages: with pythonPackages; [
-              pip
-              pytest
+          packages = [
+            (pkgs.python3.withPackages (ps: [
+              ps.pip
+              ps.pytest
             ]))
-
-            ruff
+            pkgs.uv
+            pkgs.ruff
           ];
-
-          shellHook = ''
-            echo "Wynn Python Development Environment"
-            echo "Python: $(python --version)"
-            echo "Ruff: $(ruff --version)"
-          '';
         };
 
-        # C# / Unity
         unity = pkgs.mkShell {
           name = "wynn-unity";
-
           packages = with pkgs; [
             dotnet-sdk
           ];
-
-          shellHook = ''
-            echo "Wynn Unity / C# Development Environment"
-            echo ".NET SDK: $(dotnet --version)"
-          '';
         };
       };
+
+      # Nix formatter
+      formatter.${system} = pkgs.nixfmt;
     };
 }
-
-

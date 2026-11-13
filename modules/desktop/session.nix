@@ -1,18 +1,19 @@
-{ config, pkgs,  ... }:
+
+{ config, pkgs, ... }:
 
 {
   # Niri
   programs.niri.enable = true;
   programs.xwayland.enable = true;
 
-  # Display manager
+  # Display manager: manual login with agreety
   services.greetd = {
     enable = true;
 
     settings = {
       default_session = {
-        command = "${config.programs.niri.package}/bin/niri-session";
-        user = "wynn";
+        command = "${pkgs.greetd}/bin/agreety --cmd ${config.programs.niri.package}/bin/niri-session";
+        user = "greeter";
       };
     };
   };
@@ -29,3 +30,4 @@
     xwayland-satellite
   ];
 }
+

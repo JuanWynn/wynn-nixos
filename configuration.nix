@@ -14,6 +14,7 @@
     # Hardware
     ./modules/hardware/graphics.nix
     ./modules/hardware/storage.nix
+    ./modules/hardware/laptop.nix
 
     # Desktop
     ./modules/desktop/session.nix

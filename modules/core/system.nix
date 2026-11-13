@@ -1,20 +1,35 @@
 { ... }:
 
 {
-  # Nix Flakes
+  # Nix configuration
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
 
+  # Automatic garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+
+  # Automatic store optimisation
+  nix.optimise.automatic = true;
+
   # Bootloader
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10;
+  };
+
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Time zone
-  time.timeZone = "America/Bogota";
+  # ZRAM
+  zramSwap.enable = true;
 
-  # Internationalisation
+  # System settings
+  time.timeZone = "America/Bogota";
   i18n.defaultLocale = "en_US.UTF-8";
 
   console = {
@@ -24,9 +39,8 @@
 
   services.xserver.xkb.layout = "latam";
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # System configuration version
+  # Preserve compatibility with the existing installation
   system.stateVersion = "26.11";
 }

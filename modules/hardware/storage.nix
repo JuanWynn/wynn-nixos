@@ -1,10 +1,11 @@
+
 { ... }:
 
 {
   # Secondary NTFS drive
   fileSystems."/mnt/data" = {
     device = "/dev/disk/by-uuid/DCB28BAEB28B8BA8";
-    fsType = "ntfs";
+    fsType = "ntfs3";
 
     options = [
       "rw"
@@ -12,6 +13,7 @@
       "gid=100"
       "umask=002"
       "nofail"
+      "x-systemd.automount"
     ];
   };
 }

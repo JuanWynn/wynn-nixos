@@ -16,8 +16,6 @@
     jq
 
     # Editors and development
-    nano
-    vim
     neovim
     vscode
     gitkraken
@@ -37,6 +35,9 @@
     kdePackages.gwenview
     yazi
     yacreader
+    swaylock
+    playerctl
+    brightnessctl
 
     # Office
     libreoffice-qt
