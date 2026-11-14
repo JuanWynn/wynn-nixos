@@ -1,9 +1,9 @@
-
 { ... }:
 
 {
   imports = [
     ./apps
+    ./desktop/niri.nix
     ./programs/git.nix
     ./programs/spicetify.nix
     ./shell/bash.nix
@@ -16,5 +16,3 @@
   # Home Manager state version
   home.stateVersion = "26.11";
 }
-
-
