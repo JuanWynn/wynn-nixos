@@ -5,8 +5,12 @@
   networking.hostName = "nixos";
 
   # NetworkManager
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    wifi.backend = "iwd";
+  };
 
-  # Wi-Fi backend
-  networking.networkmanager.wifi.backend = "iwd";
+  # iwd
+  networking.wireless.iwd.enable = true;
+  networking.wireless.enable = false;
 }
