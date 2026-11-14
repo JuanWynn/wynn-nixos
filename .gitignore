@@ -1,0 +1,23 @@
+# SOPS / age private keys
+keys.txt
+*.agekey
+*.age
+.config/sops/age/
+
+# Decrypted secrets and temporary files
+*.dec
+*.dec.yaml
+*.plaintext
+*.plaintext.yaml
+*.secret
+*.secret.yaml
+
+# Nix build artifacts
+result
+result-*
+
+# Editor and temporary files
+*.swp
+*.swo
+*~
+.DS_Store

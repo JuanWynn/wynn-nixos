@@ -1,3 +1,4 @@
+
 {
   description = "Wynn NixOS configuration";
 
@@ -13,6 +14,11 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, ... } @ inputs: {
@@ -23,6 +29,11 @@
         ./configuration.nix
 
         home-manager.nixosModules.home-manager
+        inputs.sops-nix.nixosModules.sops
+
+        {
+          sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+        }
 
         {
           home-manager = {

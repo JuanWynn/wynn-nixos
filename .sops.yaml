@@ -1,0 +1,8 @@
+keys:
+  - &wynn age1v6xzwx774aqkjv8sw9vmhsza240p0dlp0r99vjxazsxm2au2x4gqrwrh52
+
+creation_rules:
+  - path_regex: ^secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *wynn

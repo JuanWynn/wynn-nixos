@@ -1,8 +1,8 @@
 # Wynn NixOS
 
-Personal NixOS desktop configuration designed around a Wayland-first workflow, creative applications, development tools, gaming, and a hybrid AMD/NVIDIA graphics setup.
+Personal NixOS configuration designed around a Wayland-first desktop, creative applications, development tools, gaming and a hybrid AMD/NVIDIA graphics setup.
 
-**Version:** 1.1  
+**Version:** 1.2
 **Status:** Active development
 
 ## System Overview
@@ -11,7 +11,7 @@ Personal NixOS desktop configuration designed around a Wayland-first workflow, c
 |---|---|
 | Operating System | NixOS 26.11 |
 | Architecture | x86_64-linux |
-| Desktop Environment | Niri |
+| Window Manager | Niri |
 | Desktop Shell | Noctalia |
 | Display Protocol | Wayland |
 | Terminal | Alacritty |
@@ -19,8 +19,9 @@ Personal NixOS desktop configuration designed around a Wayland-first workflow, c
 | Browser | Firefox |
 | Graphics | AMD Radeon Vega 10 + NVIDIA RTX 2060 |
 | Audio | PipeWire |
-| Configuration | Nix Flakes + NixOS Modules |
+| System Configuration | Nix Flakes |
 | User Environment | Home Manager |
+| Secrets Management | SOPS + age |
 
 ## Hardware
 
@@ -28,7 +29,7 @@ Personal NixOS desktop configuration designed around a Wayland-first workflow, c
 - **GPU:** NVIDIA GeForce RTX 2060 Mobile 6 GB
 - **Integrated GPU:** AMD Radeon Vega 10
 - **RAM:** 32 GB
-- **Storage:** 2 TB SSD + 500 GB SSD
+- **Storage:** NVMe SSD and 2 TB HDD
 
 ## Included Software
 
@@ -39,7 +40,7 @@ Personal NixOS desktop configuration designed around a Wayland-first workflow, c
 - GitKraken
 - Node.js
 - pnpm
-- Nix development tools (nixfmt, nil, statix)
+- Nix development tools
 
 ### Desktop and Utilities
 - Firefox
@@ -73,74 +74,100 @@ Personal NixOS desktop configuration designed around a Wayland-first workflow, c
 
 ## Features
 
-- Declarative system configuration using NixOS.
-- Flake-based configuration with locked dependencies.
-- Modular system architecture.
-- Home Manager integration for user-level configuration and applications.
-- Niri Wayland compositor.
-- Noctalia desktop shell.
+- Declarative NixOS configuration.
+- Flake-based dependency management with `flake.lock`.
+- Modular system configuration.
+- Home Manager integration.
+- Niri Wayland compositor and Noctalia shell.
 - Hybrid AMD/NVIDIA graphics configuration.
 - NVIDIA PRIME render offload.
-- XWayland compatibility for applications requiring X11.
-- PipeWire audio stack with ALSA, PulseAudio compatibility and JACK support through PipeWire.
+- XWayland compatibility.
+- PipeWire with ALSA, PulseAudio and JACK support.
 - Steam and GameMode integration.
 - Persistent NTFS data partition mounted at `/mnt/data`.
 - Declarative Spotify customization through Spicetify-Nix.
+- Encrypted user password hash managed with SOPS and age.
 
 ## Repository Structure
 
 ```text
 wynn-nixos/
-├── flake.nix
-├── flake.lock
-├── configuration.nix
+├── config/
+│   └── niri/
+│       └── config.kdl
+├── docs/
+│   └── recovery.md
+├── home/
+│   └── wynn/
+│       ├── apps/
+│       │   └── default.nix
+│       ├── programs/
+│       │   ├── git.nix
+│       │   └── spicetify.nix
+│       ├── shell/
+│       │   └── bash.nix
+│       └── default.nix
 ├── modules/
 │   ├── audio/
+│   │   └── pipewire.nix
 │   ├── core/
-│   └── gaming/
-└── home/
-    └── wynn/
-        ├── apps/
-        ├── desktop/
-        ├── programs/
-        └── shell/
-```
+│   │   ├── networking.nix
+│   │   ├── system.nix
+│   │   └── users.nix
+│   ├── desktop/
+│   │   └── session.nix
+│   ├── gaming/
+│   │   └── steam.nix
+│   └── hardware/
+│       ├── graphics.nix
+│       └── storage.nix
+├── secrets/
+│   └── wynn.yaml
+├── .gitignore
+├── .sops.yaml
+├── configuration.nix
+├── flake.lock
+├── flake.nix
+├── hardware-configuration.nix
+└── README.md
 
-The repository separates system-level configuration from user-level configuration.
+Configuration layers
+- NixOS Modules: system services, users, networking, hardware, audio, desktop session and gaming.
+- Home Manager: user applications, Git, Spicetify and shell configuration.
+- Config: desktop configuration files.
+- Secrets: encrypted configuration managed through SOPS.
+- Docs: recovery and maintenance documentation.
+Usage
+Clone the repository:
 
-- **NixOS Modules:** hardware, system services, audio, users and gaming.
-- **Home Manager:** user applications, programs, shell configuration and desktop-related settings.
-- **Flakes:** dependency management and reproducible system configuration.
-
-## Usage
-
-Clone the repository and enter its directory:
-
-```bash
 git clone https://github.com/JuanWynn/wynn-nixos.git
 cd wynn-nixos
-```
 
 Validate the configuration before applying changes:
 
-```bash
 sudo nixos-rebuild dry-build --flake .#nixos
-```
 
 Apply the configuration:
 
-```bash
 sudo nixos-rebuild switch --flake .#nixos
-```
 
 Update Flake dependencies:
 
-```bash
 nix flake update
-```
 
-## Roadmap
+Validate the Flake:
 
+nix flake check --no-build
+Secrets Management
+SOPS and age are used to encrypt sensitive configuration.
+- .sops.yaml defines the encryption rules.
+- secrets/wynn.yaml stores encrypted secrets.
+- The age private key is stored outside the repository.
+- The private key must be backed up securely.
+Never commit or upload the age private key.
+
+See docs/recovery.md for system recovery instructions.
+Roadmap
 - [x] Establish the base NixOS configuration.
 - [x] Configure Niri and Noctalia.
 - [x] Introduce Nix Flakes.
@@ -151,12 +178,13 @@ nix flake update
 - [x] Integrate Steam and GameMode.
 - [x] Organize user applications and development tools.
 - [x] Integrate Spicetify-Nix.
+- [x] Configure SOPS and age for secret management.
+- [x] Document initial recovery procedure.
+- [ ] Complete the first Flake-based system switch.
 - [ ] Develop reusable development environments (DevShells).
 - [ ] Improve CUDA support for creative and development workflows.
 - [ ] Implement optional device synchronization.
 - [ ] Introduce maintenance and system monitoring tools.
 - [ ] Refine desktop appearance and visual identity.
-
----
 
 Personal configuration maintained by Wynn.

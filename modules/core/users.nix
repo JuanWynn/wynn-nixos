@@ -1,12 +1,24 @@
 
+{ config, ... }:
+
 {
+  # User password secret
+  sops.secrets."wynn-password-hash" = {
+    sopsFile = ../../secrets/wynn.yaml;
+    neededForUsers = true;
+  };
+
   # User account
   users.users.wynn = {
     isNormalUser = true;
-    extraGroups = [ 
+
+    hashedPasswordFile =
+      config.sops.secrets."wynn-password-hash".path;
+
+    extraGroups = [
       "wheel"
       "gamemode"
-     ];
+    ];
   };
 }
 
