@@ -3,6 +3,7 @@
 {
   imports = [
     ./apps
+    ./desktop/cursor.nix
     ./desktop/niri.nix
     ./desktop/noctalia.nix
     ./programs/git.nix
