@@ -40,7 +40,7 @@ The desktop uses five named workspaces organized by activity.
 | 2 | GENERAL | Dolphin, Vesktop, Spotify (managed by Spicetify-Nix) |
 | 3 | DEVELOPMENT | Visual Studio Code, GitKraken |
 | 4 | MULTIMEDIA | Blender, DaVinci Resolve, and multimedia tools |
-| 5 | GAMING | Steam and games |
+| 5 | GAMING | Steam, RetroArch, Vita3K, and games |
 | 6–9 | Available | No predefined assignments |
 
 Firefox and manually opened Alacritty terminals are not assigned to a fixed workspace.
@@ -105,6 +105,8 @@ Applications are automatically assigned to workspaces through Niri `window-rule`
 | Visual Studio Code | `code` | DEVELOPMENT |
 | GitKraken | `gitkraken` | DEVELOPMENT |
 | Steam | `steam` | GAMING |
+| RetroArch | `(?i)^(com\.libretro\.RetroArch|retroarch)$` | GAMING |
+| Vita3K | `(?i)^vita3k$` | GAMING |
 | DaVinci Resolve | `(?i)^davinci-resolve(-nvidia)?$` | MULTIMEDIA |
 
 These rules apply when new application windows are created. Existing windows may need to be reopened to use the updated assignments.

@@ -407,6 +407,18 @@ window-rule {
 }
 
 window-rule {
+    // RetroArch loads every libretro core inside the same frontend window.
+    match app-id=r#"(?i)^(com\.libretro\.RetroArch|retroarch)$"#
+    open-on-workspace "5: GAMING"
+}
+
+window-rule {
+    // Vita3K is installed as a standalone emulator, not a RetroArch core.
+    match app-id=r#"(?i)^vita3k$"#
+    open-on-workspace "5: GAMING"
+}
+
+window-rule {
     match app-id=r#"(?i)^davinci-resolve(-nvidia)?$"#
     open-on-workspace "4: MULTIMEDIA"
 }
