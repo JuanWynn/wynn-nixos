@@ -14,6 +14,8 @@ Procedimiento para recuperar la configuración de Wynn NixOS después de una rei
     git clone https://github.com/JuanWynn/wynn-nixos.git
     cd wynn-nixos
 
+La configuración versionada corresponde al ASUS TUF Gaming FX505DV. Antes de desplegarla en otro equipo, reemplazar `hardware-configuration.nix` por el archivo generado para ese equipo y revisar los identificadores de GPU en `modules/hardware/graphics.nix` y el UUID del volumen de datos en `modules/hardware/storage.nix`. No cambies `system.stateVersion` como parte de una migración de hardware.
+
 ## 3. Restaurar la clave age
 
 Conectar la USB e identificar su partición:
@@ -38,6 +40,10 @@ Desmontar la USB:
 Desde la raíz del repositorio:
 
     sudo nixos-rebuild dry-build --flake .#nixos
+
+La comprobación de Flake evalúa la configuración NixOS y valida la sintaxis de Niri:
+
+    nix flake check
 
 Si la validación termina correctamente:
 

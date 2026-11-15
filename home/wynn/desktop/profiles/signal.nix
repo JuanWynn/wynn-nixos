@@ -92,12 +92,12 @@
       };
 
       lockscreen = {
-        enabled = true;
+        enabled = false;
         blur_intensity = 0.65;
         tint_intensity = 0.25;
       };
 
-      lockscreen_widgets.enabled = true;
+      lockscreen_widgets.enabled = false;
 
       wallpaper = {
         enabled = true;

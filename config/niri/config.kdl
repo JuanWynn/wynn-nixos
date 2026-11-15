@@ -9,6 +9,7 @@ workspace "4: MULTIMEDIA"
 workspace "5: GAMING"
 
 spawn-at-startup "alacritty"
+spawn-at-startup "@POLKIT_AGENT@"
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://niri-wm.github.io/niri/Configuration:-Input
@@ -338,6 +339,26 @@ window-rule {
     open-floating true
 }
 
+// Keep the focus ring around Alacritty instead of drawing it behind its
+// semitransparent surface, and blur the wallpaper through the terminal.
+window-rule {
+    match app-id="^Alacritty$"
+    draw-border-with-background false
+
+    background-effect {
+        blur true
+    }
+}
+
+// Keep Noctalia's bar and dock blur regions, sampling the content behind them.
+layer-rule {
+    match namespace=r#"^noctalia-(bar-[^"]+|dock)$"#
+
+    background-effect {
+        xray false
+    }
+}
+
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
@@ -364,7 +385,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="discord"
+    match app-id=r#"(?i)^vesktop$"#
     open-on-workspace "2: GENERAL"
 }
 
@@ -383,6 +404,11 @@ window-rule {
 window-rule {
     match app-id="steam"
     open-on-workspace "5: GAMING"
+}
+
+window-rule {
+    match app-id=r#"(?i)^davinci-resolve(-nvidia)?$"#
+    open-on-workspace "4: MULTIMEDIA"
 }
 
 binds {

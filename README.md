@@ -8,7 +8,8 @@ A personal, declarative NixOS system built around a Wayland desktop, development
 
 | Component | Configuration |
 |---|---|
-| Operating system | NixOS 26.11 |
+| Installed NixOS release | 26.11 |
+| Nixpkgs channel | `nixos-unstable` (exact revision pinned in `flake.lock`) |
 | Architecture | `x86_64-linux` |
 | Host | ASUS TUF Gaming FX505DV |
 | CPU | AMD Ryzen 7 3750H |
@@ -19,7 +20,7 @@ A personal, declarative NixOS system built around a Wayland desktop, development
 | Compositor | Niri |
 | Desktop shell | Noctalia |
 | Terminal | Alacritty |
-| Login manager | greetd |
+| Login greeter | Noctalia Greeter through greetd |
 | Network | NetworkManager with iwd |
 | Audio | PipeWire |
 | System and user configuration | Nix Flakes and Home Manager |
@@ -47,7 +48,9 @@ wynn-nixos/
 │   │   ├── noctalia.nix
 │   │   └── profiles/signal.nix
 │   ├── programs/
+│   │   ├── alacritty.nix
 │   │   ├── git.nix
+│   │   ├── neovim-transparency.nix
 │   │   └── spicetify.nix
 │   ├── shell/bash.nix
 │   └── default.nix
@@ -77,8 +80,10 @@ The NixOS configuration is split into modules for core system settings, networki
 Implemented system features include:
 
 - Nix Flakes with a locked dependency set and Home Manager integration.
-- Niri, greetd, and XWayland support.
+- Niri, Noctalia Greeter through greetd, and XWayland support.
+- A Plymouth `cybernetic` boot splash; systemd-boot remains the bootloader.
 - AMD and NVIDIA graphics with NVIDIA PRIME offload.
+- Bluetooth support through BlueZ, enabled at boot.
 - NetworkManager using iwd as its Wi-Fi backend.
 - PipeWire with ALSA, 32-bit ALSA, PulseAudio compatibility, RTKit, and the PipeWire JACK compatibility package.
 - Steam, Steam hardware support, and GameMode.
@@ -104,8 +109,10 @@ Niri and Noctalia are managed declaratively through Home Manager. The desktop cu
 
 - Five named activity workspaces and the existing Niri keybindings and window rules.
 - The Noctalia `WynnSignal` dark palette, using orange, blue, and yellow accents.
-- Noctalia's panel, dock, launcher, control center, lockscreen, blur, transparency, and animations.
-- Space Grotesk as the Noctalia shell font.
+- Noctalia's panel, dock, launcher, control center, blur, transparency, and animations; its session lock screen is disabled.
+- Niri compositor blur for Alacritty and Noctalia's bar and dock; Alacritty opacity is configured through Home Manager.
+- Neovim transparency highlights configured through a Home Manager-managed Lua file.
+- Space Grotesk installed system-wide and used by Noctalia, Spicetify, and the WynnSignal Vencord theme.
 - Bibata Modern Ice cursors at size 24, configured through Home Manager and Niri.
 - Noctalia's built-in screenshot and annotation features, tested and kept as configured.
 - User-managed wallpaper selection.
@@ -116,15 +123,16 @@ The desktop overview and current shortcut reference are in [`docs/desktop.md`](d
 
 Applications are declared in Home Manager, except Firefox, which is enabled at the NixOS level.
 
-- **Development:** VS Code, Neovim, Vim, Nano, GitKraken, Node.js, pnpm, Nix formatter, Nil, Statix.
-- **System utilities:** tree, wget, Fastfetch, pciutils, Mesa demos, btop, ripgrep, fd, fzf, jq.
+- **Development:** VS Code, Neovim, Nano, GitKraken, Node.js, pnpm, Nix formatter, Nil, Statix.
+- **System utilities:** tree, wget, Fastfetch, pciutils, Mesa demos, btop, ripgrep, fd, fzf, jq, playerctl, brightnessctl.
 - **Desktop and files:** Alacritty, Dolphin, Ark, Okular, Gwenview, Yazi, YACReader.
 - **Office:** LibreOffice.
 - **Multimedia and creative:** VLC, Blender, GIMP, Inkscape, OBS Studio, FFmpeg, ImageMagick.
-- **Communication:** Discord.
+- **Gaming:** Steam; RetroArch cores for NES, SNES, N64, PS1, PS2, PSP, Game Boy, Game Boy Color, Game Boy Advance, Nintendo DS, 3DS, and GameCube; Vita3K for PS Vita.
+- **Communication:** Vesktop, with Vencord built in.
 - **Audio tools:** qpwgraph and the PulseAudio package; PipeWire provides PulseAudio compatibility.
 - **Compression:** unzip, zip, p7zip.
-- **Music:** Spotify customization through Spicetify-Nix.
+- **Music:** Spotify installed and customized declaratively through Spicetify-Nix.
 
 ## Common Commands
 
@@ -146,8 +154,11 @@ nix develop .#unity
 # Format the Flake outputs
 nix fmt
 
-# Evaluate Flake checks without building their outputs
+# Evaluate the NixOS configuration and check definitions without building outputs
 nix flake check --no-build
+
+# Build and run the Flake checks, including Niri configuration validation
+nix flake check
 
 # Update locked inputs
 nix flake update
@@ -170,6 +181,7 @@ The repository contains the encrypted SOPS file and its encryption rules. The ag
 - [x] Apply a Flake-based system switch.
 - [x] Establish the WynnSignal desktop palette and configure Bibata Modern Ice cursors.
 - [x] Try Noctalia's built-in screenshot features and keep the current setup.
+- [x] Declare the media and brightness utilities used by Niri keybindings and add Flake checks for NixOS evaluation and Niri syntax.
 
 ### In progress or planned
 

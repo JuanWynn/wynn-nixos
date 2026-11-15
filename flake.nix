@@ -1,4 +1,3 @@
-
 {
   description = "Wynn NixOS configuration";
 
@@ -23,7 +22,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
@@ -91,6 +96,23 @@
       };
 
       formatter.${system} = pkgs.nixfmt;
+
+      checks.${system} = {
+        nixos-evaluation =
+          assert self.nixosConfigurations.nixos.config.system.build.toplevel.drvPath != "";
+          pkgs.runCommand "nixos-config-evaluation" { } ''
+            touch "$out"
+          '';
+
+        niri-config =
+          pkgs.runCommand "niri-config-validation"
+            {
+              nativeBuildInputs = [ self.nixosConfigurations.nixos.config.programs.niri.package ];
+            }
+            ''
+              niri validate --config ${./config/niri/config.kdl}
+              touch "$out"
+            '';
+      };
     };
 }
-
