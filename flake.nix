@@ -23,33 +23,74 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+    let
       system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+    in
+    {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        inherit system;
 
-      modules = [
-        ./configuration.nix
+        modules = [
+          ./configuration.nix
 
-        home-manager.nixosModules.home-manager
-        inputs.sops-nix.nixosModules.sops
+          home-manager.nixosModules.home-manager
+          inputs.sops-nix.nixosModules.sops
 
-        {
-          sops.age.keyFile = "/var/lib/sops-nix/key.txt";
-        }
+          {
+            sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+          }
 
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
 
-            extraSpecialArgs = {
-              inherit inputs;
+              extraSpecialArgs = {
+                inherit inputs;
+              };
+
+              users.wynn = import ./home/wynn;
             };
+          }
+        ];
+      };
 
-            users.wynn = import ./home/wynn;
-          };
-        }
-      ];
+      devShells.${system} = {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+            git
+            nixfmt
+            nil
+            statix
+          ];
+        };
+
+        javascript = pkgs.mkShell {
+          packages = with pkgs; [
+            nodejs
+            pnpm
+          ];
+        };
+
+        python = pkgs.mkShell {
+          packages = with pkgs; [
+            python3
+            uv
+            python3Packages.pytest
+            ruff
+          ];
+        };
+
+        unity = pkgs.mkShell {
+          packages = with pkgs; [
+            dotnet-sdk
+          ];
+        };
+      };
+
+      formatter.${system} = pkgs.nixfmt;
     };
-  };
 }
+
