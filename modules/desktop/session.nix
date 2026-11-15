@@ -16,11 +16,6 @@
       };
     };
   };
-
-  # Noctalia
-  programs.noctalia.systemd.enable = true;
-  programs.noctalia.enable = true;
-
   # Niri environment
   systemd.user.services.niri.enableDefaultPath = false;
 

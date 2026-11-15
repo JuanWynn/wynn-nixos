@@ -4,6 +4,7 @@
   imports = [
     ./apps
     ./desktop/niri.nix
+    ./desktop/noctalia.nix
     ./programs/git.nix
     ./programs/spicetify.nix
     ./shell/bash.nix
