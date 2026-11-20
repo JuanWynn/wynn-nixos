@@ -57,7 +57,7 @@ in
     ./desktop/cursor.nix
     ./desktop/niri.nix
     ./desktop/noctalia.nix
-    ./programs/alacritty.nix
+    ./programs/kitty.nix
     ./programs/git.nix
     ./programs/neovim-transparency.nix
     ./programs/spicetify.nix

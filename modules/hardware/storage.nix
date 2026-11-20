@@ -1,17 +1,11 @@
 { ... }:
 
 {
-  # Secondary NTFS drive
+  # Secondary ext4 drive
   fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-uuid/DCB28BAEB28B8BA8";
-    fsType = "ntfs";
+    device = "/dev/disk/by-uuid/b4613f44-5339-488a-ab2d-5c4cb3c9b67b";
+    fsType = "ext4";
 
-    options = [
-      "rw"
-      "uid=1000"
-      "gid=100"
-      "umask=002"
-      "nofail"
-    ];
+    options = [ "nofail" ];
   };
 }

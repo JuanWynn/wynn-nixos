@@ -8,7 +8,7 @@ workspace "3: DEVELOPMENT"
 workspace "4: MULTIMEDIA"
 workspace "5: GAMING"
 
-spawn-at-startup "alacritty"
+spawn-at-startup "kitty"
 spawn-at-startup "@POLKIT_AGENT@"
 // Input device configuration.
 // Find the full list of options on the wiki:
@@ -339,10 +339,10 @@ window-rule {
     open-floating true
 }
 
-// Keep the focus ring around Alacritty instead of drawing it behind its
+// Keep the focus ring around Kitty instead of drawing it behind its
 // semitransparent surface, and blur the wallpaper through the terminal.
 window-rule {
-    match app-id="^Alacritty$"
+    match app-id="^kitty$"
     draw-border-with-background false
 
     background-effect {
@@ -439,7 +439,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
+    Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Super+Alt+L hotkey-overlay-title="Lock Screen" { spawn "noctalia" "msg" "session" "lock"; }
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -617,6 +617,8 @@ binds {
     Mod+Y { spawn "dolphin"; }
     Mod+G { spawn "gitkraken"; }
     Mod+X { spawn "code"; }
+    Mod+D { spawn "vesktop"; }
+    Mod+P { spawn "spotify"; }
     Mod+Shift+S { spawn "steam"; }
 
     // Alternatively, there are commands to move just a single window:

@@ -41,9 +41,37 @@ in
     "flakes"
   ];
 
+  # Remove generations older than two weeks during weekly garbage collection.
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+
+  # Keep at most the 20 newest system generations (including the current one).
+  systemd.services.limit-system-generations = {
+    description = "Limit retained NixOS system generations";
+    serviceConfig.Type = "oneshot";
+    script = ''
+      ${pkgs.nix}/bin/nix-env \
+        --profile /nix/var/nix/profiles/system \
+        --delete-generations +20
+    '';
+  };
+
+  systemd.timers.limit-system-generations = {
+    description = "Prune old NixOS system generations weekly";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "weekly";
+      Persistent = true;
+    };
+  };
+
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 20;
 
   # Plymouth boot splash: include only the selected cybernetic theme.
   boot.plymouth = {
@@ -79,8 +107,12 @@ in
 
   fonts.packages = [ spaceGrotesk ];
 
-  # Graphical partition editor; authorization is handled through polkit.
-  environment.systemPackages = [ pkgs.gparted ];
+  # System-wide packages.
+  environment.systemPackages = with pkgs; [
+    gparted
+    mpvpaper
+    python3
+  ];
   security.polkit.enable = true;
 
   console = {
