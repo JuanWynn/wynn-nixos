@@ -103,7 +103,7 @@ There is no `Mod + P` binding in the current Niri configuration.
 The audio, media and brightness controls are configured through dedicated Niri keybindings.
 The `playerctl` and `brightnessctl` commands are included in the Home Manager package set.
 
-Noctalia Greeter through greetd requests the account password before starting Niri. Its dark login screen uses the Wynn orange, blue, and yellow palette with Space Grotesk. Noctalia's in-session lock screen and its widgets are disabled. The firmware and systemd-boot menu appear before Plymouth; the splash covers the operating-system loading phase.
+Noctalia Greeter through greetd requests the account password before starting Niri. Its dark login screen uses the Wynn orange, blue, and yellow palette with Space Grotesk. Noctalia's in-session lock screen is enabled and locks after ten minutes of inactivity; lock screen widgets remain disabled. The firmware and systemd-boot menu appear before Plymouth; the splash covers the operating-system loading phase.
 
 ## Window Rules
 

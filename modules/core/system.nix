@@ -51,6 +51,7 @@ in
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.editor = false;
   # Limit boot menu entries; nix.gc controls removal of old generations and store paths.
   boot.loader.systemd-boot.configurationLimit = 20;
 

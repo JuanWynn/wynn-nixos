@@ -92,12 +92,18 @@
       };
 
       lockscreen = {
-        enabled = false;
+        enabled = true;
         blur_intensity = 0.65;
         tint_intensity = 0.25;
       };
 
       lockscreen_widgets.enabled = false;
+
+      idle.behavior.lock = {
+        enabled = true;
+        timeout = 600;
+        action = "lock";
+      };
 
       wallpaper = {
         enabled = true;
