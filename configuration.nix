@@ -14,6 +14,7 @@
     ./modules/hardware/graphics.nix
     ./modules/hardware/storage.nix
     ./modules/hardware/power.nix
+    ./modules/backup/borgmatic.nix
 
     # Desktop
     ./modules/desktop/session.nix
