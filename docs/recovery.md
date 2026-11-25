@@ -1,68 +1,68 @@
 # Wynn NixOS — Recovery Guide
 
-Procedimiento para recuperar la configuración de Wynn NixOS después de una reinstalación.
+Procedure for recovering Wynn NixOS after a reinstall.
 
-## 1. Requisitos
+## 1. Requirements
 
-- Una instalación funcional de NixOS.
-- Acceso al repositorio `JuanWynn/wynn-nixos`.
-- Copia de seguridad de la clave privada age.
-- Acceso a Internet.
+- A working NixOS installation.
+- Access to the `JuanWynn/wynn-nixos` repository.
+- A backup of the age private key.
+- Internet access.
 
-## 2. Clonar el repositorio
+## 2. Clone the repository
 
     git clone https://github.com/JuanWynn/wynn-nixos.git
     cd wynn-nixos
 
-La configuración versionada corresponde al ASUS TUF Gaming FX505DV. Antes de desplegarla en otro equipo, reemplazar `hardware-configuration.nix` por el archivo generado para ese equipo y revisar los identificadores de GPU en `modules/hardware/graphics.nix` y el UUID del volumen de datos en `modules/hardware/storage.nix`. No cambies `system.stateVersion` como parte de una migración de hardware.
+The versioned configuration targets the ASUS TUF Gaming FX505DV. Before deploying it on another machine, replace `hardware-configuration.nix` with the file generated for that machine and review the GPU identifiers in `modules/hardware/graphics.nix` and the data volume UUID in `modules/hardware/storage.nix`. Do not change `system.stateVersion` as part of a hardware migration.
 
-## 3. Restaurar la clave age
+## 3. Restore the age key
 
-Conectar la USB e identificar su partición:
+Connect the USB drive and identify its partition:
 
     lsblk -f
 
-Montar la partición correspondiente (sustituir `/dev/sdX1`):
+Mount the relevant partition (replace `/dev/sdX1`):
 
     sudo mkdir -p /mnt/usb
     sudo mount /dev/sdX1 /mnt/usb
 
-Restaurar la clave privada:
+Restore the private key:
 
     sudo install -D -m 600 /mnt/usb/sops-backup/keys.txt /var/lib/sops-nix/key.txt
 
-Desmontar la USB:
+Unmount the USB drive:
 
     sudo umount /mnt/usb
 
-## 4. Reconstruir el sistema
+## 4. Rebuild the system
 
-Desde la raíz del repositorio:
+From the repository root:
 
     sudo nixos-rebuild dry-build --flake .#nixos
 
-La comprobación de Flake evalúa la configuración NixOS y valida la sintaxis de Niri:
+The Flake check evaluates the NixOS configuration and validates Niri syntax:
 
     nix flake check
 
-Si la validación termina correctamente:
+If validation succeeds:
 
     sudo nixos-rebuild switch --flake .#nixos
 
-## 5. Recuperación de la contraseña
+## 5. Password recovery
 
-El hash de la contraseña de `wynn` está almacenado en `secrets/wynn.yaml`, cifrado mediante SOPS con age.
+The `wynn` password hash is stored in `secrets/wynn.yaml`, encrypted with SOPS and age.
 
-La clave privada restaurada permite descifrarlo durante la activación de NixOS.
+The restored private key allows NixOS to decrypt it during activation.
 
-La configuración utiliza `hashedPasswordFile` y `neededForUsers` para que el secreto esté disponible durante la creación de usuarios.
+The configuration uses `hashedPasswordFile` and `neededForUsers` to make the secret available when users are created.
 
-Con `users.mutableUsers = true`, la contraseña de una cuenta existente no se fuerza en cada reconstrucción. En una instalación limpia, el usuario se crea utilizando el hash declarado.
+With `users.mutableUsers = true`, a password change made with `passwd` updates the local account but does not update the encrypted hash in SOPS. The repository hash is used when creating the account on a clean installation; keep it synchronized if you want the same password to be restored there.
 
-## 6. Seguridad
+## 6. Security
 
-- Nunca subir la clave privada age al repositorio.
-- Mantener la copia de seguridad en un lugar seguro.
-- No guardar versiones descifradas de `secrets/wynn.yaml`.
-- Conservar `secrets/wynn.yaml` y `.sops.yaml` versionados.
-- Si se pierde la clave privada, los secretos cifrados con ella no podrán recuperarse.
+- Never upload the age private key to the repository.
+- Keep the backup in a secure location.
+- Do not store decrypted versions of `secrets/wynn.yaml`.
+- Keep `secrets/wynn.yaml` and `.sops.yaml` versioned.
+- If the private key is lost, secrets encrypted to it cannot be recovered.

@@ -30,8 +30,8 @@
           enabled = true;
           auto_hide = true;
           auto_hide_delay_ms = 300;
-	        reserve_space = true;
-	        auto_hide_reserve_space = true;
+          reserve_space = true;
+          auto_hide_reserve_space = true;
           position = "left";
           thickness = 52;
           margin_ends = 100;

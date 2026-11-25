@@ -1,4 +1,3 @@
-
 { pkgs, ... }:
 
 {
@@ -26,4 +25,3 @@
     pkgs.pipewire.jack
   ];
 }
-

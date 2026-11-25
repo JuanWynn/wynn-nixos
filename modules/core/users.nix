@@ -1,7 +1,8 @@
-
 { config, ... }:
 
 {
+  users.mutableUsers = true;
+
   # User password secret
   sops.secrets."wynn-password-hash" = {
     sopsFile = ../../secrets/wynn.yaml;
@@ -12,8 +13,7 @@
   users.users.wynn = {
     isNormalUser = true;
 
-    hashedPasswordFile =
-      config.sops.secrets."wynn-password-hash".path;
+    hashedPasswordFile = config.sops.secrets."wynn-password-hash".path;
 
     extraGroups = [
       "wheel"
@@ -21,4 +21,3 @@
     ];
   };
 }
-
