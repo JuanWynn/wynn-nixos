@@ -39,6 +39,7 @@ wynn-nixos/
 │   └── niri/config.kdl
 ├── docs/
 │   ├── desktop.md
+│   ├── media-server.md
 │   └── recovery.md
 ├── home/wynn/
 │   ├── apps/default.nix
@@ -62,6 +63,9 @@ wynn-nixos/
 │   │   └── users.nix
 │   ├── desktop/session.nix
 │   ├── gaming/steam.nix
+│   ├── multimedia/
+│   │   ├── compose.yaml
+│   │   └── media-server.nix
 │   └── hardware/
 │       ├── graphics.nix
 │       └── storage.nix
@@ -88,6 +92,7 @@ Implemented system features include:
 - NetworkManager using iwd as its Wi-Fi backend.
 - PipeWire with ALSA, 32-bit ALSA, PulseAudio compatibility, RTKit, and the PipeWire JACK compatibility package.
 - Steam, Steam hardware support, and GameMode.
+- A rootless Podman media stack that starts manually; see [`docs/media-server.md`](docs/media-server.md).
 - A data volume declared as ext4 and mounted at `/mnt/data`.
 - SOPS and age for the encrypted user password hash.
 
@@ -110,7 +115,7 @@ Niri and Noctalia are managed declaratively through Home Manager. The desktop cu
 
 - Five named activity workspaces and the existing Niri keybindings and window rules.
 - The Noctalia `WynnSignal` dark palette, using orange, blue, and yellow accents.
-- Noctalia's panel, dock, launcher, control center, blur, transparency, and animations; its session lock screen is disabled.
+- Noctalia's panel, dock, launcher, control center, blur, transparency, and animations; the session lock screen engages after ten minutes of inactivity.
 - Niri compositor blur for Kitty and Noctalia's bar and dock; Kitty opacity is configured through Home Manager.
 - Neovim transparency highlights configured through a Home Manager-managed Lua file.
 - Space Grotesk installed system-wide and used by Noctalia, Spicetify, and the WynnSignal Vencord theme.

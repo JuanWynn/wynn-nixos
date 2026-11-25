@@ -23,6 +23,9 @@
     # Gaming
     ./modules/gaming/steam.nix
 
+    # Multimedia services
+    ./modules/multimedia/media-server.nix
+
   ];
 
   # Browser

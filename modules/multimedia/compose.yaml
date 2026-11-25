@@ -1,0 +1,134 @@
+
+name: wynn-media
+
+services:
+
+  # DOWNLOAD CLIENT
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+      WEBUI_PORT: "8080"
+      TORRENTING_PORT: "6881"
+    volumes:
+      - /home/wynn/media-server/config/qbittorrent:/config
+      - /mnt/data/media:/data
+    ports:
+      - "127.0.0.1:8080:8080"
+      # BitTorrent peer traffic needs a host-reachable listening port.
+      - "6881:6881"
+      - "6881:6881/udp"
+    networks:
+      - media-net
+
+  # INDEXER MANAGER
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+    volumes:
+      - /home/wynn/media-server/config/prowlarr:/config
+    ports:
+      - "127.0.0.1:9696:9696"
+    networks:
+      - media-net
+
+  # CLOUDFLARE CHALLENGE SERVICE
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      LOG_LEVEL: info
+      LOG_HTML: "false"
+      CAPTCHA_SOLVER: none
+      TZ: America/Bogota
+    networks:
+      - media-net
+
+  # TV SERIES
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+    volumes:
+      - /home/wynn/media-server/config/sonarr:/config
+      - /mnt/data/media:/data
+    ports:
+      - "127.0.0.1:8989:8989"
+    networks:
+      - media-net
+
+  # MOVIES
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+    volumes:
+      - /home/wynn/media-server/config/radarr:/config
+      - /mnt/data/media:/data
+    ports:
+      - "127.0.0.1:7878:7878"
+    networks:
+      - media-net
+
+  # SUBTITLES
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+    volumes:
+      - /home/wynn/media-server/config/bazarr:/config
+      - /mnt/data/media/movies:/data/movies
+      - /mnt/data/media/tv:/data/tv
+    ports:
+      - "127.0.0.1:6767:6767"
+    networks:
+      - media-net
+
+  # MEDIA SERVER
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    userns_mode: keep-id
+    environment:
+      PUID: "1000"
+      PGID: "100"
+      UMASK: "002"
+      TZ: America/Bogota
+    volumes:
+      - /home/wynn/media-server/config/jellyfin:/config
+      - /mnt/data/media/movies:/data/movies:ro
+      - /mnt/data/media/tv:/data/tv:ro
+    ports:
+      - "127.0.0.1:8096:8096"
+    networks:
+      - media-net
+
+networks:
+  media-net:
+    driver: bridge
