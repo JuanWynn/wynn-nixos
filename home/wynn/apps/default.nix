@@ -1,6 +1,16 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
+  # Build Blender against Nixpkgs' CUDA-enabled package set without enabling
+  # CUDA support for every package in the system package set.
+  blenderCuda = (import inputs.nixpkgs {
+    system = pkgs.stdenv.hostPlatform.system;
+    config = {
+      cudaSupport = true;
+      allowUnfree = true;
+    };
+  }).blender;
+
   davinciResolveNvidia = pkgs.writeShellScriptBin "davinci-resolve-nvidia" ''
     exec env \
       __NV_PRIME_RENDER_OFFLOAD=1 \
@@ -52,7 +62,10 @@ in
 
     # Multimedia
     vlc
-    blender
+    stremio-linux-shell
+    blenderCuda
+    krita
+    ardour
     gimp
     inkscape
     obs-studio

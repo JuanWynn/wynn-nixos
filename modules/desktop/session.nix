@@ -1,5 +1,10 @@
 { pkgs, ... }:
 
+let
+  astronautTheme = pkgs.sddm-astronaut.override {
+    embeddedTheme = "black_hole";
+  };
+in
 {
   # Niri
   programs.niri.enable = true;
@@ -7,7 +12,9 @@
 
   # Noctalia Greeter provides the pre-session login screen through greetd.
   services.displayManager.noctalia-greeter = {
-    enable = true;
+    # Keep its configuration so it can be re-enabled instead of SDDM below.
+    # Only one display manager should be enabled at a time.
+    enable = false;
 
     settings = {
       session.default = "niri";
@@ -49,11 +56,22 @@
     };
   };
 
+  # SDDM with the Astronaut theme. To switch back, disable SDDM and set
+  # services.displayManager.noctalia-greeter.enable = true above.
+  services.displayManager.sddm = {
+    enable = true;
+    package = pkgs.kdePackages.sddm;
+    theme = "sddm-astronaut-theme";
+    extraPackages = [ astronautTheme ];
+    wayland.enable = true;
+  };
+
   # Niri environment
   systemd.user.services.niri.enableDefaultPath = false;
 
   # XWayland compatibility
   environment.systemPackages = with pkgs; [
     xwayland-satellite
+    astronautTheme
   ];
 }
