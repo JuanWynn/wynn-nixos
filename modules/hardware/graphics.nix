@@ -15,6 +15,10 @@
     modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
 
     # AMD + NVIDIA hybrid graphics
     prime = {

@@ -13,12 +13,14 @@
     # Hardware
     ./modules/hardware/graphics.nix
     ./modules/hardware/storage.nix
+    ./modules/hardware/power.nix
 
     # Desktop
     ./modules/desktop/session.nix
 
     # Audio
     ./modules/audio/pipewire.nix
+    ./modules/audio/pipewire-low-latency.nix
 
     # Gaming
     ./modules/gaming/steam.nix
