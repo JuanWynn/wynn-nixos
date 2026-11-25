@@ -11,7 +11,7 @@ The configuration is managed declaratively through Home Manager and stored in th
 | Window Manager | Niri |
 | Desktop Shell | Noctalia |
 | Display Protocol | Wayland |
-| Terminal | Alacritty |
+| Terminal | Kitty |
 | Application Launcher | Noctalia |
 | File Manager | Dolphin |
 | Browser | Firefox |
@@ -24,7 +24,7 @@ The configuration is managed declaratively through Home Manager and stored in th
 | `home/wynn/desktop/niri.nix` | Home Manager integration |
 | `home/wynn/default.nix` | Home Manager imports and local Vesktop/Vencord theme |
 | `home/wynn/desktop/profiles/signal.nix` | Noctalia WynnSignal settings and palette |
-| `home/wynn/programs/alacritty.nix` | Alacritty opacity and Home Manager integration |
+| `home/wynn/programs/kitty.nix` | Kitty opacity and Home Manager integration |
 | `home/wynn/programs/neovim-transparency.nix` | Neovim transparent highlight groups |
 | `home/wynn/programs/spicetify.nix` | Spotify WynnSignal palette and Space Grotesk styling |
 
@@ -36,14 +36,14 @@ The desktop uses five named workspaces organized by activity.
 
 | Workspace | Name | Applications |
 |---|---|---|
-| 1 | CONTROL CENTER | Alacritty (startup instance) |
+| 1 | CONTROL CENTER | Kitty (startup instance) |
 | 2 | GENERAL | Dolphin, Vesktop, Spotify (managed by Spicetify-Nix) |
 | 3 | DEVELOPMENT | Visual Studio Code, GitKraken |
 | 4 | MULTIMEDIA | Blender, Krita, Ardour, DaVinci Resolve, and multimedia tools |
 | 5 | GAMING | Steam, RetroArch, Vita3K, and games |
 | 6–9 | Available | No predefined assignments |
 
-Firefox and manually opened Alacritty terminals are not assigned to a fixed workspace.
+Firefox and manually opened Kitty terminals are not assigned to a fixed workspace.
 
 ## Quick Keyboard Shortcuts
 
@@ -53,7 +53,7 @@ Firefox and manually opened Alacritty terminals are not assigned to a fixed work
 
 | Shortcut | Action |
 |---|---|
-| `Mod + T` | Open Alacritty |
+| `Mod + T` | Open Kitty |
 | `Super + Shift + M` | Open Stremio |
 | `Super + Shift + K` | Open Krita |
 | `Super + Shift + B` | Open Blender |
@@ -65,8 +65,11 @@ Firefox and manually opened Alacritty terminals are not assigned to a fixed work
 | `Mod + Y` | Open Dolphin |
 | `Mod + G` | Open GitKraken |
 | `Mod + X` | Open Visual Studio Code |
+| `Mod + D` | Open Vesktop |
 
 `Super + Shift + Space` opens Niri's **Important Hotkeys** overlay.
+
+There is no `Mod + P` binding in the current Niri configuration.
 
 ### Noctalia
 
@@ -121,19 +124,19 @@ These rules apply when new application windows are created. Existing windows may
 
 ## Startup Applications
 
-Niri starts one Alacritty instance automatically.
+Niri starts one Kitty instance automatically.
 
 ```kdl
-spawn-at-startup "alacritty"
+spawn-at-startup "kitty"
 ```
 
 This instance provides a persistent terminal in CONTROL CENTER.
 
-Other Alacritty instances remain unrestricted and can be opened in any workspace.
+Other Kitty instances remain unrestricted and can be opened in any workspace.
 
 Noctalia is managed independently through its systemd service. No additional startup applications are currently configured.
 
-Alacritty's opacity is configured through Home Manager, with Niri applying a compositor blur effect. Noctalia's bar and dock request compositor blur through their WynnSignal settings; Niri's layer rule uses content behind those surfaces. These settings are declared in the repository; apply them with a system rebuild and check the running session to confirm runtime behavior.
+Kitty's opacity is configured through Home Manager, with Niri applying a compositor blur effect. Noctalia's bar and dock request compositor blur through their WynnSignal settings; Niri's layer rule uses content behind those surfaces. These settings are declared in the repository; apply them with a system rebuild and check the running session to confirm runtime behavior.
 
 Space Grotesk is installed system-wide from a pinned Google Fonts revision. Noctalia, Spicetify, and the local Vencord theme use the same font with the WynnSignal orange, blue, yellow, and dark-surface palette. After rebuilding, enable **WynnSignal** once in Vesktop under **Settings → Vencord → Themes**.
 
@@ -162,7 +165,7 @@ nix flake check
 Apply system and Home Manager changes:
 
 ```bash
-sudo nixos-rebuild switch --flake /home/wynn-nixos#nixos
+sudo nixos-rebuild switch --flake .#nixos
 ```
 
 Niri configuration changes can be validated before applying them to the system.

@@ -19,7 +19,7 @@ A personal, declarative NixOS system built around a Wayland desktop, development
 | Display protocol | Wayland |
 | Compositor | Niri |
 | Desktop shell | Noctalia |
-| Terminal | Alacritty |
+| Terminal | Kitty |
 | Login greeter | Noctalia Greeter through greetd |
 | Network | NetworkManager with iwd |
 | Audio | PipeWire |
@@ -48,8 +48,8 @@ wynn-nixos/
 │   │   ├── noctalia.nix
 │   │   └── profiles/signal.nix
 │   ├── programs/
-│   │   ├── alacritty.nix
 │   │   ├── git.nix
+│   │   ├── kitty.nix
 │   │   ├── neovim-transparency.nix
 │   │   └── spicetify.nix
 │   ├── shell/bash.nix
@@ -66,6 +66,7 @@ wynn-nixos/
 │       ├── graphics.nix
 │       └── storage.nix
 ├── .sops.yaml
+├── LICENSE
 ├── secrets/wynn.yaml
 ├── configuration.nix
 ├── flake.lock
@@ -87,7 +88,7 @@ Implemented system features include:
 - NetworkManager using iwd as its Wi-Fi backend.
 - PipeWire with ALSA, 32-bit ALSA, PulseAudio compatibility, RTKit, and the PipeWire JACK compatibility package.
 - Steam, Steam hardware support, and GameMode.
-- An NTFS data volume mounted at `/mnt/data`.
+- A data volume declared as ext4 and mounted at `/mnt/data`.
 - SOPS and age for the encrypted user password hash.
 
 ### Development shells
@@ -101,7 +102,7 @@ The Flake provides these shells:
 | `python` | Python, uv, pytest, Ruff |
 | `unity` | .NET SDK |
 
-Enter a shell with `nix develop` or select one by name, for example `nix develop .#python`.
+Node.js and pnpm are provided by the `javascript` shell; Nixfmt, Nil, and Statix are provided by the `default` shell rather than installed persistently in the user profile. Enter a shell with `nix develop` or select one by name, for example `nix develop .#python`.
 
 ## Wynn Desktop
 
@@ -110,7 +111,7 @@ Niri and Noctalia are managed declaratively through Home Manager. The desktop cu
 - Five named activity workspaces and the existing Niri keybindings and window rules.
 - The Noctalia `WynnSignal` dark palette, using orange, blue, and yellow accents.
 - Noctalia's panel, dock, launcher, control center, blur, transparency, and animations; its session lock screen is disabled.
-- Niri compositor blur for Alacritty and Noctalia's bar and dock; Alacritty opacity is configured through Home Manager.
+- Niri compositor blur for Kitty and Noctalia's bar and dock; Kitty opacity is configured through Home Manager.
 - Neovim transparency highlights configured through a Home Manager-managed Lua file.
 - Space Grotesk installed system-wide and used by Noctalia, Spicetify, and the WynnSignal Vencord theme.
 - Bibata Modern Ice cursors at size 24, configured through Home Manager and Niri.
@@ -123,9 +124,9 @@ The desktop overview and current shortcut reference are in [`docs/desktop.md`](d
 
 Applications are declared in Home Manager, except Firefox, which is enabled at the NixOS level.
 
-- **Development:** VS Code, Neovim, Nano, GitKraken, Node.js, pnpm, Nix formatter, Nil, Statix.
+- **Development:** VS Code, Neovim, Nano, GitKraken.
 - **System utilities:** tree, wget, Fastfetch, pciutils, Mesa demos, btop, ripgrep, fd, fzf, jq, playerctl, brightnessctl.
-- **Desktop and files:** Alacritty, Dolphin, Ark, Okular, Gwenview, Yazi, YACReader.
+- **Desktop and files:** Kitty, Dolphin, Ark, Okular, Gwenview, Yazi, YACReader.
 - **Office:** LibreOffice.
 - **Multimedia and creative:** VLC, Blender, GIMP, Inkscape, OBS Studio, FFmpeg, ImageMagick.
 - **Gaming:** Steam; RetroArch cores for NES, SNES, N64, PS1, PS2, PSP, Game Boy, Game Boy Color, Game Boy Advance, Nintendo DS, 3DS, and GameCube; Vita3K for PS Vita.

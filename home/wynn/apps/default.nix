@@ -3,13 +3,14 @@
 let
   # Build Blender against Nixpkgs' CUDA-enabled package set without enabling
   # CUDA support for every package in the system package set.
-  blenderCuda = (import inputs.nixpkgs {
-    system = pkgs.stdenv.hostPlatform.system;
-    config = {
-      cudaSupport = true;
-      allowUnfree = true;
-    };
-  }).blender;
+  blenderCuda =
+    (import inputs.nixpkgs {
+      system = pkgs.stdenv.hostPlatform.system;
+      config = {
+        cudaSupport = true;
+        allowUnfree = true;
+      };
+    }).blender;
 
   davinciResolveNvidia = pkgs.writeShellScriptBin "davinci-resolve-nvidia" ''
     exec env \
@@ -41,13 +42,6 @@ in
     neovim
     vscode
     gitkraken
-    nodejs
-    pnpm
-
-    # Nix development
-    nixfmt
-    nil
-    statix
 
     # Desktop and file management
     kdePackages.dolphin
