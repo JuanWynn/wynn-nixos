@@ -35,59 +35,66 @@ let
   };
 in
 {
-  # Nix Flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    settings = {
+      # Nix Flakes
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
 
-  # Use current community caches for CUDA-enabled packages and Noctalia.
-  nix.settings = {
-    extra-substituters = [
-      "https://cache.nixos-cuda.org"
-      "https://noctalia.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-    ];
+      # Use current community caches for CUDA-enabled packages and Noctalia.
+      extra-substituters = [
+        "https://cache.nixos-cuda.org"
+        "https://noctalia.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      ];
+    };
+
+    optimise.automatic = true;
+
+    # Remove generations older than two weeks during weekly garbage collection.
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 
-  nix.optimise.automatic = true;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        editor = false;
+        # nix.gc removes old generations; this only caps boot entries.
+        configurationLimit = 20;
+      };
+      efi.canTouchEfiVariables = true;
+    };
 
-  # Remove generations older than two weeks during weekly garbage collection.
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
+    # Plymouth boot splash: include only the selected cybernetic theme.
+    plymouth = {
+      enable = true;
+      theme = "cybernetic";
+      themePackages = [
+        (pkgs.adi1090x-plymouth-themes.override {
+          selected_themes = [ "cybernetic" ];
+        })
+      ];
+    };
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.editor = false;
-  # Limit boot menu entries; nix.gc controls removal of old generations and store paths.
-  boot.loader.systemd-boot.configurationLimit = 20;
-
-  # Plymouth boot splash: include only the selected cybernetic theme.
-  boot.plymouth = {
-    enable = true;
-    theme = "cybernetic";
-    themePackages = [
-      (pkgs.adi1090x-plymouth-themes.override {
-        selected_themes = [ "cybernetic" ];
-      })
+    # Keep the boot screen clean while retaining the systemd-boot menu.
+    consoleLogLevel = 0;
+    kernelParams = [
+      "quiet"
+      "loglevel=3"
+      "rd.systemd.show_status=false"
+      "systemd.show_status=false"
     ];
   };
-
-  # Keep the boot screen clean while retaining the systemd-boot menu.
-  boot.consoleLogLevel = 0;
-  boot.kernelParams = [
-    "quiet"
-    "loglevel=3"
-    "rd.systemd.show_status=false"
-    "systemd.show_status=false"
-  ];
 
   # Time zone
   time.timeZone = "America/Bogota";

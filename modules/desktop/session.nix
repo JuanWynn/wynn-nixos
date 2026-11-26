@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 let
   astronautTheme = pkgs.sddm-astronaut.override {
@@ -18,7 +18,7 @@ in
 
     settings = {
       session.default = "niri";
-      user.default = "wynn";
+      user.default = username;
 
       appearance = {
         scheme = "Synced";

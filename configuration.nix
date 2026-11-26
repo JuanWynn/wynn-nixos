@@ -2,8 +2,8 @@
 
 {
   imports = [
-    # Hardware configuration
-    ./hardware-configuration.nix
+    # Host-specific hostname, hardware identifiers, and filesystem UUIDs.
+    ./hosts/nixos
 
     # Core
     ./modules/core/system.nix
@@ -12,9 +12,9 @@
 
     # Hardware
     ./modules/hardware/graphics.nix
-    ./modules/hardware/storage.nix
     ./modules/hardware/power.nix
     ./modules/backup/borgmatic.nix
+    ./modules/profiles.nix
 
     # Desktop
     ./modules/desktop/session.nix

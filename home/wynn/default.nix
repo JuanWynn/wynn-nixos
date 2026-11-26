@@ -1,4 +1,4 @@
-{ ... }:
+{ username, ... }:
 
 let
   wynnSignalVesktopTheme = ''
@@ -69,9 +69,11 @@ in
   xdg.configFile."vesktop/themes/WynnSignal.theme.css".text = wynnSignalVesktopTheme;
 
   # User information
-  home.username = "wynn";
-  home.homeDirectory = "/home/wynn";
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
 
-  # Home Manager state version
-  home.stateVersion = "26.11";
+    # Home Manager state version
+    stateVersion = "26.11";
+  };
 }

@@ -31,11 +31,13 @@
     }@inputs:
     let
       system = "x86_64-linux";
+      username = "wynn";
       pkgs = import nixpkgs { inherit system; };
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit username; };
 
         modules = [
           ./configuration.nix
@@ -53,10 +55,10 @@
               useUserPackages = true;
 
               extraSpecialArgs = {
-                inherit inputs;
+                inherit inputs username;
               };
 
-              users.wynn = import ./home/wynn;
+              users.${username} = import (./home + "/${username}");
             };
           }
         ];
@@ -69,6 +71,7 @@
             nixfmt
             nil
             statix
+            pre-commit
           ];
         };
 
@@ -110,7 +113,9 @@
               nativeBuildInputs = [ self.nixosConfigurations.nixos.config.programs.niri.package ];
             }
             ''
-              niri validate --config ${./config/niri/config.kdl}
+              niri validate --config ${
+                self.nixosConfigurations.nixos.config.home-manager.users.${username}.xdg.configFile."niri/config.kdl".source
+              }
               touch "$out"
             '';
       };

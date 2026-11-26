@@ -14,7 +14,7 @@ Procedure for recovering Wynn NixOS after a reinstall.
     git clone https://github.com/JuanWynn/wynn-nixos.git
     cd wynn-nixos
 
-The versioned configuration targets the ASUS TUF Gaming FX505DV. Before deploying it on another machine, replace `hardware-configuration.nix` with the file generated for that machine and review the GPU identifiers in `modules/hardware/graphics.nix` and the data volume UUID in `modules/hardware/storage.nix`. Do not change `system.stateVersion` as part of a hardware migration.
+The versioned configuration targets the ASUS TUF Gaming FX505DV. Before deploying it on another machine, replace `hosts/nixos/hardware-configuration.nix` with the file generated for that machine and review the GPU identifiers and filesystem UUIDs in `hosts/nixos/default.nix` and `hosts/nixos/storage.nix`. Do not change `system.stateVersion` as part of a hardware migration.
 
 ## 3. Restore the age key
 

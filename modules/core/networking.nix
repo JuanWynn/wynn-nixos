@@ -1,16 +1,15 @@
-{ ... }:
+_:
 
 {
-  # Hostname
-  networking.hostName = "nixos";
+  networking = {
+    # NetworkManager
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
 
-  # NetworkManager
-  networking.networkmanager = {
-    enable = true;
-    wifi.backend = "iwd";
+    # iwd
+    wireless.iwd.enable = true;
+    wireless.enable = false;
   };
-
-  # iwd
-  networking.wireless.iwd.enable = true;
-  networking.wireless.enable = false;
 }
