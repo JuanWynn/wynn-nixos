@@ -13,6 +13,7 @@
     # Hardware
     ./modules/hardware/graphics.nix
     ./modules/hardware/power.nix
+    ./modules/services/syncthing.nix
     ./modules/backup/borgmatic.nix
     ./modules/profiles.nix
 

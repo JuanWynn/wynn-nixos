@@ -17,6 +17,7 @@ _:
     };
 
     fstrim.enable = true;
+    upower.enable = true;
     smartd.enable = true;
     colord.enable = true;
   };

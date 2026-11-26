@@ -77,6 +77,7 @@ wynn-nixos/
 │   ├── desktop/session.nix
 │   ├── gaming/steam.nix
 │   ├── profiles.nix
+│   ├── services/syncthing.nix
 │   ├── multimedia/
 │   │   ├── compose.yaml
 │   │   └── media-server.nix
@@ -112,6 +113,7 @@ Implemented system features include:
 - Host-specific hardware, GPU identifiers, and filesystem UUIDs grouped under `hosts/nixos/`.
 - Direnv with nix-direnv integration for Flake development shells; see [`docs/dev-environments.md`](docs/dev-environments.md).
 - Steam, Steam hardware support, and GameMode.
+- Syncthing service for device synchronization.
 - A rootless Podman media stack that starts manually; see [`docs/media-server.md`](docs/media-server.md).
 - A data volume declared as ext4 and mounted at `/mnt/data`.
 - SOPS and age for the encrypted user password hash.
