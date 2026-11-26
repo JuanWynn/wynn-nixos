@@ -39,6 +39,7 @@ wynn-nixos/
 │   └── niri/config.kdl
 ├── docs/
 │   ├── desktop.md
+│   ├── backup.md
 │   ├── media-server.md
 │   └── recovery.md
 ├── home/wynn/
@@ -56,6 +57,7 @@ wynn-nixos/
 │   ├── shell/bash.nix
 │   └── default.nix
 ├── modules/
+│   ├── backup/borgmatic.nix
 │   ├── audio/pipewire.nix
 │   ├── core/
 │   │   ├── networking.nix
@@ -173,6 +175,12 @@ nix flake update
 ## Secrets and Recovery
 
 The repository contains the encrypted SOPS file and its encryption rules. The age private key is stored outside the repository and must be backed up separately. Never commit or upload that private key. See [`docs/recovery.md`](docs/recovery.md) for the recovery procedure.
+
+## Backups
+
+The Borgmatic configuration is prepared but disabled. It will back up the home directory, this repository, `/mnt/data`, and `/etc/nixos`, excluding caches, downloads, Steam libraries, DaVinci Resolve cache/proxy folders, and age private keys. When enabled, it will run daily, retain 7 daily, 4 weekly, and 6 monthly snapshots, and report failures to the system journal and logged-in terminals. The repository passphrase is configured through SOPS; it is never stored in the Nix configuration.
+
+The USB checked for this purpose was a 3.7 GB FAT volume labelled `ARCH_202605`. It is too small for the data set and FAT is not recommended for a Borg repository, so it was left untouched and will not be used. Backups remain disabled until a suitable larger external disk or remote repository is chosen. See [`docs/backup.md`](docs/backup.md) for the future setup and restore procedure.
 
 ## Roadmap
 
