@@ -14,6 +14,7 @@
     ./modules/hardware/graphics.nix
     ./modules/hardware/storage.nix
     ./modules/hardware/power.nix
+    ./modules/backup/borgmatic.nix
 
     # Desktop
     ./modules/desktop/session.nix
@@ -29,6 +30,12 @@
     ./modules/multimedia/media-server.nix
 
   ];
+
+  # Backups stay disabled until a suitable external or remote repository is chosen.
+  # wynn.backups = {
+  #   enable = true;
+  #   repository = "/path/to/backup-repository";
+  # };
 
   # Browser
   programs.firefox.enable = true;
