@@ -31,6 +31,12 @@
 
   ];
 
+  # Backups stay disabled until a suitable external or remote repository is chosen.
+  # wynn.backups = {
+  #   enable = true;
+  #   repository = "/path/to/backup-repository";
+  # };
+
   # Browser
   programs.firefox.enable = true;
 }

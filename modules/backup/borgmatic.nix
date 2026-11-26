@@ -17,6 +17,12 @@ in
       default = null;
       description = "Local path or Borg URL for the backup repository.";
     };
+
+    repositoryMountUnit = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional systemd mount unit required for a local repository.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -89,8 +95,14 @@ in
 
     # Make failures visible to logged-in terminals and in the system journal.
     systemd.services.borgmatic = {
-      requires = [ "mnt-data.mount" ];
-      after = [ "mnt-data.mount" ];
+      requires = [
+        "mnt-data.mount"
+      ]
+      ++ lib.optional (cfg.repositoryMountUnit != null) cfg.repositoryMountUnit;
+      after = [
+        "mnt-data.mount"
+      ]
+      ++ lib.optional (cfg.repositoryMountUnit != null) cfg.repositoryMountUnit;
       unitConfig.OnFailure = [ "wynn-backup-failure.service" ];
     };
     systemd.services.wynn-backup-failure = {

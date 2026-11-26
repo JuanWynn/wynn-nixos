@@ -2,7 +2,10 @@
 
 The repository contains an optional Borgmatic setup. It is disabled until a
 backup destination is chosen and the repository passphrase is added to SOPS.
-No snapshots are created while it is disabled.
+No snapshots are created while it is disabled. The connected USB observed
+during setup is a 3.7 GB FAT volume labelled `ARCH_202605`; it is not used for
+backups. Borg recommends against storing a live repository on FAT because a
+power loss or disconnect can leave the repository inconsistent.
 
 ## Configure the destination and passphrase
 
@@ -14,10 +17,12 @@ Choose a local or remote Borg repository, then set the options in
 wynn.backups = {
   enable = true;
   repository = "/path/to/backup-repository";
+  # Set this for a local repository on a dedicated mounted drive.
+  repositoryMountUnit = "your-backup-drive.mount";
 };
 ```
 
-For a remote Borg repository, use the Borg URL in `repository`. Before
+Omit `repositoryMountUnit` for a remote Borg repository. Before
 enabling the module, add `borgmatic-repository-passphrase` to the encrypted
 `secrets/wynn.yaml` with `sops secrets/wynn.yaml`. Enter it only in the SOPS
 editor; never put it in Nix configuration, shell history, or a plaintext file.
