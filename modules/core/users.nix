@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, username, ... }:
 
 {
   users.mutableUsers = true;
@@ -10,7 +10,7 @@
   };
 
   # User account
-  users.users.wynn = {
+  users.users.${username} = {
     isNormalUser = true;
 
     hashedPasswordFile = config.sops.secrets."wynn-password-hash".path;

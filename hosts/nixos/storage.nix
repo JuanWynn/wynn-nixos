@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   # Secondary ext4 drive

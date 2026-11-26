@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   xdg.configFile."nvim/after/plugin/wynn-transparency.lua".text = ''

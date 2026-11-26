@@ -38,10 +38,21 @@ wynn-nixos/
 ├── config/
 │   └── niri/config.kdl
 ├── docs/
+│   ├── dev-environments.md
 │   ├── desktop.md
 │   ├── backup.md
 │   ├── media-server.md
+│   ├── profiles.md
 │   └── recovery.md
+├── examples/devshells/
+│   ├── default/.envrc
+│   ├── javascript/.envrc
+│   ├── python/.envrc
+│   └── unity/.envrc
+├── hosts/nixos/
+│   ├── default.nix
+│   ├── hardware-configuration.nix
+│   └── storage.nix
 ├── home/wynn/
 │   ├── apps/default.nix
 │   ├── desktop/
@@ -65,19 +76,23 @@ wynn-nixos/
 │   │   └── users.nix
 │   ├── desktop/session.nix
 │   ├── gaming/steam.nix
+│   ├── profiles.nix
 │   ├── multimedia/
 │   │   ├── compose.yaml
 │   │   └── media-server.nix
 │   └── hardware/
 │       ├── graphics.nix
-│       └── storage.nix
+│       └── power.nix
+├── .github/workflows/ci.yml
+├── .pre-commit-config.yaml
+├── .envrc
+├── CHANGELOG.md
 ├── .sops.yaml
 ├── LICENSE
 ├── secrets/wynn.yaml
 ├── configuration.nix
 ├── flake.lock
-├── flake.nix
-└── hardware-configuration.nix
+└── flake.nix
 ```
 
 ## Wynn Core
@@ -93,6 +108,9 @@ Implemented system features include:
 - Bluetooth support through BlueZ, enabled at boot.
 - NetworkManager using iwd as its Wi-Fi backend.
 - PipeWire with ALSA, 32-bit ALSA, PulseAudio compatibility, RTKit, and the PipeWire JACK compatibility package.
+- Optional `work` and `gaming` NixOS specialisations; see [`docs/profiles.md`](docs/profiles.md).
+- Host-specific hardware, GPU identifiers, and filesystem UUIDs grouped under `hosts/nixos/`.
+- Direnv with nix-direnv integration for Flake development shells; see [`docs/dev-environments.md`](docs/dev-environments.md).
 - Steam, Steam hardware support, and GameMode.
 - A rootless Podman media stack that starts manually; see [`docs/media-server.md`](docs/media-server.md).
 - A data volume declared as ext4 and mounted at `/mnt/data`.
@@ -108,6 +126,9 @@ The Flake provides these shells:
 | `javascript` | Node.js, pnpm |
 | `python` | Python, uv, pytest, Ruff |
 | `unity` | .NET SDK |
+
+The root `.envrc` selects the default shell. Example selectors for all four
+shells are in `examples/devshells/`.
 
 Node.js and pnpm are provided by the `javascript` shell; Nixfmt, Nil, and Statix are provided by the `default` shell rather than installed persistently in the user profile. Enter a shell with `nix develop` or select one by name, for example `nix develop .#python`.
 
@@ -175,6 +196,12 @@ nix flake update
 ## Secrets and Recovery
 
 The repository contains the encrypted SOPS file and its encryption rules. The age private key is stored outside the repository and must be backed up separately. Never commit or upload that private key. See [`docs/recovery.md`](docs/recovery.md) for the recovery procedure.
+
+Git is configured to sign commits and tags with SSH using
+`~/.ssh/id_ed25519.pub`. A key must be created locally and added to GitHub as
+a signing key before relying on automatic signing; see
+[`docs/dev-environments.md`](docs/dev-environments.md). The local hooks are
+configured in `.pre-commit-config.yaml`; install them with `pre-commit install`.
 
 ## Backups
 

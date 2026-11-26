@@ -1,4 +1,10 @@
-{ pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   # Build Blender against Nixpkgs' CUDA-enabled package set without enabling
@@ -22,79 +28,90 @@ let
 in
 
 {
-  home.packages = with pkgs; [
-    # System utilities
-    tree
-    wget
-    fastfetch
-    pciutils
-    mesa-demos
-    btop
-    ripgrep
-    fd
-    fzf
-    jq
-    playerctl
-    brightnessctl
+  options.wynn.gaming.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Whether gaming emulators are installed in this profile.";
+  };
 
-    # Editors and development
-    nano
-    neovim
-    vscode
-    gitkraken
+  config.home.packages =
+    (with pkgs; [
+      # System utilities
+      tree
+      wget
+      fastfetch
+      pciutils
+      mesa-demos
+      btop
+      ripgrep
+      fd
+      fzf
+      jq
+      playerctl
+      brightnessctl
 
-    # Desktop and file management
-    kdePackages.dolphin
-    kdePackages.ark
-    kdePackages.okular
-    kdePackages.gwenview
-    yazi
-    yacreader
+      # Editors and development
+      nano
+      neovim
+      vscode
+      gitkraken
 
-    # Office
-    libreoffice-qt
+      # Desktop and file management
+      kdePackages.dolphin
+      kdePackages.ark
+      kdePackages.okular
+      kdePackages.gwenview
+      yazi
+      yacreader
 
-    # Multimedia
-    vlc
-    stremio-linux-shell
-    blenderCuda
-    krita
-    ardour
-    gimp
-    inkscape
-    obs-studio
-    davinciResolveNvidia
-    ffmpeg
-    imagemagick
+      # Office
+      libreoffice-qt
 
-    # RetroArch cores for the requested Nintendo and PlayStation systems
-    (retroarch.withCores (cores: [
-      cores.nestopia # NES
-      cores.snes9x # SNES
-      cores.mupen64plus # Nintendo 64
-      cores.swanstation # PlayStation
-      cores.pcsx2 # PlayStation 2
-      cores.ppsspp # PSP
-      cores.sameboy # Game Boy and Game Boy Color
-      cores.mgba # Game Boy Advance
-      cores.melonds # Nintendo DS
-      cores.citra # Nintendo 3DS
-      cores.dolphin # GameCube
-    ]))
+      # Multimedia
+      vlc
+      stremio-linux-shell
+      blenderCuda
+      krita
+      ardour
+      gimp
+      inkscape
+      obs-studio
+      davinciResolveNvidia
+      ffmpeg
+      imagemagick
 
-    # Standalone emulator: no RetroArch libretro core is available for PS Vita.
-    vita3k
+      # Communication
+      vesktop
 
-    # Communication
-    vesktop
+      # Audio
+      pulseaudio
+      qpwgraph
 
-    # Audio
-    pulseaudio
-    qpwgraph
+      # Compression
+      unzip
+      zip
+      p7zip
+    ])
+    ++ lib.optionals config.wynn.gaming.enable (
+      with pkgs;
+      [
+        # RetroArch cores for the requested Nintendo and PlayStation systems.
+        (retroarch.withCores (cores: [
+          cores.nestopia # NES
+          cores.snes9x # SNES
+          cores.mupen64plus # Nintendo 64
+          cores.swanstation # PlayStation
+          cores.pcsx2 # PlayStation 2
+          cores.ppsspp # PSP
+          cores.sameboy # Game Boy and Game Boy Color
+          cores.mgba # Game Boy Advance
+          cores.melonds # Nintendo DS
+          cores.citra # Nintendo 3DS
+          cores.dolphin # GameCube
+        ]))
 
-    # Compression
-    unzip
-    zip
-    p7zip
-  ];
+        # Standalone emulator: no RetroArch libretro core is available for PS Vita.
+        vita3k
+      ]
+    );
 }

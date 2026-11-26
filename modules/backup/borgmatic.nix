@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  username,
   ...
 }:
 
@@ -42,7 +43,7 @@ in
       enable = true;
       configurations.wynn = {
         source_directories = [
-          "/home/wynn"
+          "/home/${username}"
           "/home/wynn-nixos"
           "/mnt/data"
           "/etc/nixos"
@@ -66,12 +67,12 @@ in
           "**/downloads"
           "**/steamapps"
           "**/SteamLibrary"
-          "/home/wynn/.local/share/Steam"
-          "/home/wynn/.steam"
+          "/home/${username}/.local/share/Steam"
+          "/home/${username}/.steam"
           "**/CacheClip"
           "**/ProxyMedia"
           "**/OptimizedMedia"
-          "/home/wynn/.config/sops/age/keys.txt"
+          "/home/${username}/.config/sops/age/keys.txt"
           "/var/lib/sops-nix/key.txt"
         ]
         ++ lib.optional (cfg.repository != null) cfg.repository;
